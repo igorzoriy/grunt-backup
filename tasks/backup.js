@@ -8,43 +8,31 @@
 
 'use strict';
 
-module.exports = function(grunt) {
-
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
-
-  grunt.registerMultiTask('backup', 'Make backups using grunt', function() {
-    // Merge task-specific and/or target-specific options with these defaults.
-    var options = this.options({
-      punctuation: '.',
-      separator: ', '
-    });
-
-    // Iterate over all specified file groups.
-    this.files.forEach(function(f) {
-      // Concat specified files.
-      var src = f.src.filter(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        } else {
-          return true;
+module.exports = function (grunt) {
+    grunt.registerMultiTask('backup', 'Make backups using grunt', function () {
+        var src = this.data.src, dest = this.data.dest;
+        if (!src) {
+            grunt.log.error("'src' path is empty.");
+            return;
         }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+        if (!dest) {
+            grunt.log.error("'dest' path is empty.");
+            return;
+        }
 
-      // Handle options.
-      src += options.punctuation;
 
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
+        var done = this.async();
+        var Tgz = require('tar.gz');
+        var compressor = new Tgz();
 
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
+        compressor.compress(src, dest, function (error) {
+            if (error) {
+                grunt.log.error(error);
+                done(false);
+            }
+
+            grunt.log.writeln('Backup successfully created in ' + dest);
+            done(true);
+        });
     });
-  });
-
 };

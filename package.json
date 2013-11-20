@@ -25,6 +25,9 @@
     "engines": {
         "node": ">= 0.8.0"
     },
+    "dependencies": {
+        "tar.gz": "~0.1.1"
+    },
     "devDependencies": {
         "grunt-contrib-jshint": "~0.6.0",
         "grunt": "~0.4.1"
@@ -33,7 +36,6 @@
         "grunt": "~0.4.1"
     },
     "keywords": [
-        "gruntplugin",
-        "backup"
+        "gruntplugin", "backup", "tar", "gz", "gzip"
     ]
 }
