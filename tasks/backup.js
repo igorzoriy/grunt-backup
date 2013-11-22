@@ -10,13 +10,14 @@
 
 module.exports = function (grunt) {
     grunt.registerMultiTask('backup', 'Make backups using grunt', function () {
+        var compressionLevel = this.data.compressionLevel || 5;
         var src = this.data.src, dest = this.data.dest;
         if (!src) {
-            grunt.log.error("'src' path is empty.");
+            grunt.log.error("Missing 'src' option.");
             return;
         }
         if (!dest) {
-            grunt.log.error("'dest' path is empty.");
+            grunt.log.error("Missing 'dest' option.");
             return;
         }
 
