@@ -13,16 +13,37 @@ module.exports = function (grunt) {
         jshint: {
             all: [
                 'Gruntfile.js',
-                'tasks/*.js'
+                'tasks/*.js',
+                '<%= nodeunit.tests %>'
             ],
             options: {
-                jshintrc: '.jshintrc',
+                jshintrc: '.jshintrc'
             },
+        },
+        clean: {
+            tests: ['tmp']
+        },
+        nodeunit: {
+            tests: ['tests/*Test.js']
+        },
+        backup: {
+            defaultCompression: {
+                src: 'tests/fixtures',
+                dest: 'tmp/backup.tar.gz'
+            },
+            customCompression: {
+                src: 'tests/fixtures',
+                dest: 'tmp/backupWithCustomCompression.tar.gz',
+                compressionLevel: 8
+            }
         }
     });
 
     grunt.loadTasks('tasks');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-    grunt.registerTask('default', ['jshint']);
+    grunt.registerTask('test', ['clean', 'backup', 'nodeunit']);
+    grunt.registerTask('default', ['jshint', 'test']);
 };

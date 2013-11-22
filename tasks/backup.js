@@ -21,10 +21,9 @@ module.exports = function (grunt) {
             return;
         }
 
-
         var done = this.async();
         var Tgz = require('tar.gz');
-        var compressor = new Tgz();
+        var compressor = new Tgz(compressionLevel);
 
         compressor.compress(src, dest, function (error) {
             if (error) {
